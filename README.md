@@ -4,6 +4,12 @@
 
 ![初始角色](projects/muse_companion/ui/assets/idle.png)
 
+实际演示效果：
+https://www.xiaohongshu.com/explore/6ad265540000000015007282?xsec_token=ABm4e92yN040lgR7q8YFFG2Tps0ZFXpaM1ZmhBmXpGklE=&xsec_source=pc_user
+
+https://www.xiaohongshu.com/explore/6ad2642b000000000a01f787?xsec_token=ABm4e92yN040lgR7q8YFFG2RSqXgLcHtXgt3ZquS2feKo=&xsec_source=pc_user
+
+
 [English](README_EN.md) · [手机配置图文教程](docs/SETUP_CN.md) · [构建](docs/BUILDING.md) · [生成角色](docs/CHARACTERS_CN.md) · [项目说明书](docs/PROJECT_MANUAL_CN.md) · [改造方案与进度](docs/OCTOP_MIGRATION_CN.md)
 
 ## 它是怎么工作的
@@ -162,3 +168,6 @@ Agent 需要本地文件、网络与设备访问能力，可能会提示你授�
 ## 开源与依赖
 
 应用源码采用 Apache-2.0，第三方代码和字体保留各自许可证，见 [NOTICE](NOTICE)。后端为 [Octop](https://github.com/TencentCloud/Octop)；平台底座是 [ESP-Mosaico Vibe](https://github.com/esp-mosaico/esp-mosaico-vibe)。早先版本的 Muse Gadget SDK 源码保留在 `projects/muse_companion/vendor/` 仅作回退参考，已不参与构建。内部固件工程名保留 `muse_companion`，公开仓库名为 `Octop-muse-esp-mosaico`。
+
+
+特别致谢： https://linux.do 社区
