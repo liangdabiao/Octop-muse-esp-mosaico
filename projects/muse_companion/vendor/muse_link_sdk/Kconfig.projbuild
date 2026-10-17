@@ -1,0 +1,9 @@
+rsource "upstream/Kconfig.projbuild"
+
+config MUSE_ENABLED
+    bool
+    default y
+
+config MUSE_BOARD_ID
+    string
+    default "mosaico"

@@ -1,0 +1,13 @@
+dependencies:
+  idf: ">=6.2"
+  esp-mosaico-bsp:
+    version: "*"
+    override_path: "../../../submodule/esp-mosaico-bsp/components/esp-mosaico-bsp"
+  esp_iris:
+    version: "*"
+    override_path: "../../../submodule/esp-mosaico-utils/ESP-Iris/components/esp_iris"
+  espressif/esp-gsp: "==1.4.0"
+  espressif/freetype: "^2.13.3"
+  espressif/cjson: "~1.7"
+  # The BSP display adapter uses headers deprecated by LVGL 9.6.
+  lvgl/lvgl: "==9.5.0"

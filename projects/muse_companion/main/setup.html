@@ -1,0 +1,39 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mochi Setup</title>
+<style>body{margin:0;background:#101010;color:#fff3ea;font:16px system-ui,sans-serif}main{max-width:440px;margin:16px auto;padding:24px}header{display:flex;justify-content:space-between;align-items:center}h1{font-size:28px}p{color:#c9c3bd;line-height:1.7}label{display:block;margin:20px 0 8px}input,select{box-sizing:border-box;width:100%;border:1px solid #4b4640;border-radius:14px;background:#222;color:white;padding:14px;font:inherit;min-width:0}button{border:0;border-radius:14px;padding:12px 18px;background:#d0ebdd;color:#302a24;font:inherit;cursor:pointer}button:disabled{opacity:.55}#save{width:100%;margin-top:24px;background:#ffe1d0}#status{min-height:40px;white-space:pre-line}small{display:block;color:#c9c3bd;margin-top:12px;line-height:1.6}.show{display:flex;align-items:center;gap:8px;font-size:14px}.show input{width:auto}.row{display:flex;gap:8px;align-items:center}.row select{flex:1}h3{margin-top:30px;border-top:1px solid #4b4640;padding-top:24px}</style>
+<main><header><h1>Mochi</h1><button id="language" type="button">English</button></header><h2 id="heading"></h2><p id="intro"></p>
+<form id="form" autocomplete="off">
+<h3 id="wifiHeading"></h3><div class="row"><select id="networks"></select><button id="scan" type="button"></button></div>
+<label for="pass" id="passLabel"></label><input id="pass" type="password" maxlength="63" autocomplete="off" autocapitalize="off" spellcheck="false">
+<h3 id="octopHeading"></h3>
+<label for="url" id="urlLabel"></label><input id="url" type="text" maxlength="255" required placeholder="http://192.168.1.20:8088" autocapitalize="off" spellcheck="false"><small id="urlNote"></small>
+<label for="user" id="userLabel"></label><input id="user" type="text" maxlength="63" required autocomplete="off" autocapitalize="off" spellcheck="false">
+<label for="secret" id="secretLabel"></label><input id="secret" type="password" maxlength="127" required autocomplete="off" autocapitalize="off" spellcheck="false">
+<h3 id="sttHeading"></h3>
+<label for="stturl" id="sttUrlLabel"></label><input id="stturl" type="text" maxlength="255" autocapitalize="off" spellcheck="false"><small id="sttNote"></small>
+<label for="sttkey" id="sttKeyLabel"></label><input id="sttkey" type="password" maxlength="255" autocomplete="off" autocapitalize="off" spellcheck="false">
+<label class="show"><input id="show" type="checkbox"><span id="showLabel"></span></label>
+<button id="save" type="submit"></button></form><p id="status" role="status" aria-live="polite"></p><small id="note"></small></main>
+<script>
+const words={zh:{heading:'首次配置',intro:'连接 Wi-Fi 并填写自建 Octop 的地址与账号。保存后设备自动重启，回答只显示在屏幕上，不发声。',wifiHeading:'Wi-Fi',passLabel:'密码（开放网络留空）',scan:'扫描',octopHeading:'Octop 服务',urlLabel:'Octop 地址',urlNote:'本机部署的默认地址，例如 http://192.168.1.20:8088，也支持 https。',userLabel:'用户名',secretLabel:'密码',sttHeading:'语音识别（可留空）',sttUrlLabel:'自定义识别接口',sttKeyLabel:'自定义识别 token',sttNote:'留空即使用 Octop 自带的 MiMo ASR；填写时需兼容 multipart 上传、返回 {"text":"…"}。',showLabel:'显示密钥',save:'保存并重启',note:'设备会先真实连接所选 Wi-Fi，连不上会提示且不会保存。识别与对话都由 Octop 完成，设备不保存任何模型密钥。',invalid:'请完整填写必填项：地址使用 http:// 或 https:// 开头，且不能包含空格、@ 或 #。',scanning:'正在扫描附近网络…',scanfailed:'扫描失败，请离设备近一点后重试。',connecting:'正在连接 Wi-Fi 并保存配置（约 15 秒）…',success:'已保存，设备正在重启。请切回常用 Wi-Fi。',wifi:'那个网络连不上，请确认密码后重试。',failed:'保存失败，请重试。',network:'连接中断，请保持连接设备热点，再重试。'},
+en:{heading:'First-time setup',intro:'Join a Wi-Fi network and point the device at your self-hosted Octop. After saving it restarts. Replies are shown on screen only, no speech.',wifiHeading:'Wi-Fi',passLabel:'Password (leave empty for open networks)',scan:'Scan',octopHeading:'Octop service',urlLabel:'Octop URL',urlNote:'Your own deployment, e.g. http://192.168.1.20:8088. https is supported too.',userLabel:'Username',secretLabel:'Password',sttHeading:'Speech recognition (optional)',sttUrlLabel:'Custom STT endpoint',sttKeyLabel:'Custom STT token',sttNote:'Leave empty to use Octop’s built-in MiMo ASR. A custom endpoint must accept multipart upload and return {"text":"…"}.',showLabel:'Show secrets',save:'Save and restart',note:'The device really connects to the chosen network first and will not save on failure. Recognition and chat both run on Octop; no model keys are stored on the device.',invalid:'Complete the required fields. The URL must start with http:// or https:// and contain no spaces, @ or #.',scanning:'Scanning nearby networks…',scanfailed:'Scan failed. Move closer to the device and retry.',connecting:'Connecting to Wi-Fi and saving (about 15 s)…',success:'Saved. The device is restarting. Switch back to your usual Wi-Fi.',wifi:'That network could not be joined. Check the password and try again.',failed:'Could not save. Please try again.',network:'Connection lost. Stay connected to the device hotspot and try again.'}};
+let lang=navigator.language.startsWith('zh')?'zh':'en',state='',nonce='';const $=id=>document.getElementById(id);
+function render(){document.documentElement.lang=lang==='zh'?'zh-CN':'en';for(const id of Object.keys(words[lang]))if($(id))$(id).textContent=words[lang][id];$('language').textContent=lang==='zh'?'English':'中文';$('status').textContent=state?words[lang][state]:'';}
+$('language').onclick=()=>{lang=lang==='zh'?'en':'zh';render();};
+$('show').onchange=()=>{for(const id of ['pass','secret','sttkey'])$(id).type=$('show').checked?'text':'password';};
+async function session(){const r=await fetch('/api/session',{cache:'no-store'});if(!r.ok)throw Error();nonce=(await r.json()).nonce;}
+async function scan(){state='scanning';render();try{await session();const r=await fetch('/api/networks',{cache:'no-store'});if(!r.ok)throw Error();const nets=await r.json(),sel=$('networks');sel.innerHTML='';nets.forEach(n=>{const o=document.createElement('option');o.value=n.ssid;o.textContent=n.ssid+' ('+n.rssi+')';sel.appendChild(o);});if(!nets.length)state='scanfailed';else state='';}catch{state='scanfailed';}$('save').disabled=false;render();}
+$('scan').onclick=scan;
+$('form').onsubmit=async event=>{event.preventDefault();
+ const value=id=>$(id).value.trim();
+ const url=value('url'),stt=value('stturl');
+ const okUrl=v=>!v||(/^https?:\/\//.test(v)&&!/[\s@#]/.test(v));
+ const config={octop_url:url,username:value('user'),password:$('secret').value,stt_url:stt,stt_key:value('sttkey'),ssid:$('networks').value,wifi_password:$('pass').value};
+ if(!/^https?:\/\//.test(url)||/[\s@#]/.test(url)||!config.username||/[\s@#]/.test(config.username)||!config.password||!okUrl(stt)||/[\s@#]/.test(value('sttkey'))||!config.ssid){state='invalid';render();return;}
+ state='connecting';$('save').disabled=true;render();
+ try{if(!nonce)await session();const r=await fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json','X-Setup-Nonce':nonce},body:JSON.stringify(config)});
+  if(!r.ok){const b=await r.json().catch(()=>({}));state=b.error==='wifi'?'wifi':b.error==='format'?'invalid':'failed';}
+  else{state='success';$('secret').value='';$('sttkey').value='';}}
+ catch{state='network';}
+ if(state!=='success')$('save').disabled=false;render();};
+render();scan();
+</script></html>

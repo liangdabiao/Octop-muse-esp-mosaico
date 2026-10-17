@@ -1,0 +1,7 @@
+# Keep the OTA writer only in the retained factory Recovery image. The normal
+# application exposes the enter-Recovery RPC through iris_ota_support_start().
+# CONFIG_ESP_IRIS_OTA is not set
+CONFIG_ESP_IRIS_USB_PRODUCT="ESP-Iris Mosaico muse_companion"
+CONFIG_ESP_IRIS_HEALTH_TIMEOUT_MS=45000
+# Three retained-Recovery methods plus six character-generation methods.
+CONFIG_ESP_IRIS_MAX_RPC_HANDLERS=12

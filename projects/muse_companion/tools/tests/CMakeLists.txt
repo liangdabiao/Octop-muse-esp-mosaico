@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.20)
+project(companion_setup_tests LANGUAGES C)
+add_executable(setup_tests setup_tests.c
+    ../../components/companion_credentials/companion_credentials.c)
+target_include_directories(setup_tests PRIVATE stubs ../../components/companion_credentials/include ../../main)
+if(MSVC)
+    string(REPLACE "/DNDEBUG" "" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+    target_compile_definitions(setup_tests PRIVATE _CRT_SECURE_NO_WARNINGS)
+    target_compile_options(setup_tests PRIVATE /W4 /WX /UNDEBUG /utf-8)
+else()
+    target_compile_options(setup_tests PRIVATE -Wall -Wextra -Werror -UNDEBUG)
+endif()

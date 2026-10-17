@@ -1,0 +1,11 @@
+build*/
+managed_components/
+sdkconfig
+sdkconfig.old
+local_secrets.h
+sdkconfig.secrets.defaults
+.sim_bridge_build.lock
+__pycache__/
+characters/**/build-preview/
+characters/**/build-asan/
+characters/**/frames.rgb
